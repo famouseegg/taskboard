@@ -30,7 +30,7 @@ export default function TaskList({ tasks, onDelete }) {
           {/* 刪除按鈕 */}
           <button
             className="text-red-500"  // 設定紅色文字樣式
-            onClick={() => onDelete(T=text.id)}  // 點擊時調用刪除函數
+            onClick={() => onDelete(task.id)}  // 點擊時調用刪除函數
           >
             Delete
           </button>
