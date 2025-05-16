@@ -17,10 +17,14 @@ export default function Home() {
 
   const [nextId, setNewId]= useState(1);  // 儲存下一個任務的ID
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];  // 從本地存儲獲取任務列表
-    setTasks(savedTasks);  // 更新任務列表狀態
-    setNewId(savedTasks.length + 1);  // 設置下一個任務的ID}
-  },[]);
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    // 確保每個任務都有有效的 id
+    const validTasks = savedTasks.filter(task => task && task.id && task.title);
+    setTasks(validTasks);
+    // 找出最大的 id 值作為下一個 id
+    const maxId = validTasks.reduce((max, task) => Math.max(max, task.id), 0);
+    setNewId(maxId + 1);
+  }, []);
   // 添加新任務的函數
   const addTask = () => {
     // 檢查新任務是否為空
@@ -29,12 +33,12 @@ export default function Home() {
     }
     console.log("Before:　",tasks);  // 輸出添加前的任務列表
     console.log("Now:　",newTask);  // 輸出當前要添加的任務
-    const newTask0bj = {
+    const newTaskObj = {
       id: nextId,  // 設置任務ID
       title: newTask,  // 設置任務標題
       description: "",  // 設置任務描述為空
     }
-    const updatedTasks = [...tasks, newTask, newTask0bj];  // 創建包含新任務的陣列
+    const updatedTasks = [...tasks, newTaskObj];  // 創建包含新任務的陣列
     setTasks(updatedTasks);  // 更新任務列表
     console.log("After： ",updatedTasks);  // 輸出添加後的任務列表
     setNewTask("");  // 清空輸入框
@@ -42,8 +46,8 @@ export default function Home() {
     setNewId(nextId + 1);  // 更新下一個任務的ID
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));  // 將更新後的任務列表保存到本地存儲
   }
-  const handleDelete = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);  // 過濾掉被刪除的任務
+  const handleDelete = (taskId) => {
+    const newTasks = tasks.filter((task) => task.id !== taskId);  // 過濾掉被刪除的任務
     setTasks(newTasks);  // 更新任務列表
     localStorage.setItem("tasks", JSON.stringify(newTasks));  // 將更新後的任務列表保存到本地存儲
   }

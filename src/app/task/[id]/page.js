@@ -20,7 +20,7 @@ export default function TaskDetail({ params }) {
 
     useEffect(() => {
         const saveTasks = JSON.parse(localStorage.getItem('tasks')) || [];  // 獲取本地存儲中的任務列表
-        const task = saveTasks.find((task) => t.id === Number(id));  // 根據id查找任務
+        const task = saveTasks.find((task) => task.id === Number(id));  // 根據id查找任務
         if (task) {
             setTitle(task.title);  // 設置任務標題
             setDescription(task.description);  // 設置任務描述
